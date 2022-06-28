@@ -1,0 +1,34 @@
+name: PR
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17
+    
+    - name: Set up linter
+      uses: golangci/golangci-lint-action@v2
+      with:
+        version: latest
+
+    - name: Lint
+      run: make lint
+
+    - name: Test
+      run: make test
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2
+
+    - name: Build
+      run: make build
+
